@@ -1,0 +1,37 @@
+PRACTICA 3: DISCO ADICIONAL DE 20 GB
+
+Se apagó la máquina virtual y se abrió su Configuración en VirtualBox, en la sección Almacenamiento.
+
+Se agregó un disco duro nuevo al controlador SATA con la opción de añadir disco duro, y se creó un disco virtual con estas características:
+Tipo de archivo: VDI
+Almacenamiento: reservado dinámicamente
+Tamaño: 20 GB
+
+Se seleccionó el disco creado, se pulsó Elegir y Aceptar, y se encendió la máquina virtual.
+
+Se reinició el sistema y se verificó que el disco nuevo aparece sin particiones.
+sudo reboot
+lsblk
+
+Se creó la partición y se formateó como ext4.
+sudo parted -s /dev/sdb mklabel gpt mkpart primary ext4 0% 100%
+sudo mkfs.ext4 /dev/sdb1
+
+Se creó una carpeta en el escritorio y se montó el disco en ella con el comando mount.
+mkdir ~/Desktop/disco
+sudo mount /dev/sdb1 ~/Desktop/disco
+df -h | grep sdb1
+
+Se entró al directorio y se creó el archivo AdrianAlcantara.txt.
+cd ~/Desktop/disco
+sudo touch AdrianAlcantara.txt
+ls
+
+Se desmontó la unidad y se montó en el directorio /mnt.
+cd ~
+sudo umount ~/Desktop/disco
+sudo mount /dev/sdb1 /mnt
+
+Se ingresó a /mnt y se comprobó que el archivo continúa ahí.
+cd /mnt
+ls
